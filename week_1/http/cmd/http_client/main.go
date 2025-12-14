@@ -32,7 +32,7 @@ type Note struct {
 	UpdatedAt string   `json:"updated_at"`
 }
 
-func createNoteClient() (Note, error) {
+func createNote() (Note, error) {
 	note := NoteInfo{
 		Title:    gofakeit.BeerName(),
 		Context:  gofakeit.IPv4Address(),
@@ -63,7 +63,7 @@ func createNoteClient() (Note, error) {
 	return createdNote, nil
 }
 
-func getNoteClient(id int64) (Note, error) {
+func getNote(id int64) (Note, error) {
 	resp, err := http.Get(fmt.Sprintf(baseUrl+getPostfix, id))
 	if err != nil {
 		log.Fatal("Failed to get note:", err)
@@ -87,14 +87,14 @@ func getNoteClient(id int64) (Note, error) {
 }
 
 func main() {
-	note, err := createNoteClient()
+	note, err := createNote()
 	if err != nil {
 		log.Fatal("failed to create note:", err)
 	}
 
 	log.Printf(color.RedString("Note created:\n"), color.GreenString("%+v", note))
 
-	note, err = getNoteClient(note.ID)
+	note, err = getNote(note.ID)
 	if err != nil {
 		log.Fatal("failed to get note:", err)
 	}

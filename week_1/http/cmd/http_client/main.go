@@ -49,7 +49,12 @@ func createNote() (Note, error) {
 	if err != nil {
 		return Note{}, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		err = resp.Body.Close()
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}()
 
 	if resp.StatusCode != http.StatusCreated {
 		return Note{}, err
